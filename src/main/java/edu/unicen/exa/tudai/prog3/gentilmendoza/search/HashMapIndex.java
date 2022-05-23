@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 
-public class BookGenreHashMapIndex implements BookGenreIndex {
+public class HashMapIndex implements BookGenreIndex {
 
     private Map<String, List<Book>> index = new HashMap<>();
 
-    public BookGenreHashMapIndex(List<Book> books) {
+    public HashMapIndex(List<Book> books) {
         for (Book book: books) {
             for (String key: book.getGenres()) {
                 if (!index.containsKey(key)) {

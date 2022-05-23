@@ -8,11 +8,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class BookGenreArrayListNodeIndex implements BookGenreIndex {
+public class ArrayListNodeIndex implements BookGenreIndex {
 
     private List<BookIndexNode> listIndex = new ArrayList<>();
 
-    public BookGenreArrayListNodeIndex(List<Book> books) {
+    public ArrayListNodeIndex(List<Book> books) {
         for (Book book : books) {
             for (String genre: book.getGenres()) {
                 Optional<Integer> indexOpt = this.getIndexOf(genre);

@@ -8,9 +8,10 @@ public class BookGenreIndexFactory {
 
     public BookGenreIndex getBookGenreIndex(Index index, List<Book> books) {
         switch (index) {
-            case HASHMAP: return new BookGenreHashMapIndex(books);
-            case ARRAYLIST: return new BookGenreArrayListIndex(books);
-            case ARRAYLIST_NODE: return new BookGenreArrayListNodeIndex(books);
+            case HASHMAP: return new HashMapIndex(books);
+            case ARRAYLIST: return new ArrayListIndex(books);
+            case ARRAYLIST_NODE: return new ArrayListNodeIndex(books);
+            case TREE: return new TreeIndex(books);
         }
         return null;
     }

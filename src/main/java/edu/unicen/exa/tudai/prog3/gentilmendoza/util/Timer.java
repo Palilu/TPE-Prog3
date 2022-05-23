@@ -21,9 +21,6 @@ public class Timer {
 	}
 
 	public void mark(String message) {
-		BigDecimal markTime = BigDecimal.valueOf((System.nanoTime() - startTime) / 1000000.0)
-				.setScale(4, RoundingMode.HALF_EVEN);
-		System.out.print(message + markTime);
-		startTime = System.nanoTime();
+
 	}
 }

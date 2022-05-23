@@ -5,12 +5,12 @@ import edu.unicen.exa.tudai.prog3.gentilmendoza.model.Book;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookGenreArrayListIndex implements BookGenreIndex {
+public class ArrayListIndex implements BookGenreIndex {
 
     private List<String> genres = new ArrayList<>();
     private List<List<Book>> booksByGenre = new ArrayList<>();
 
-    public BookGenreArrayListIndex(List<Book> books) {
+    public ArrayListIndex(List<Book> books) {
         for (Book book : books) {
             for (String genre: book.getGenres()) {
                 int index = genres.indexOf(genre);

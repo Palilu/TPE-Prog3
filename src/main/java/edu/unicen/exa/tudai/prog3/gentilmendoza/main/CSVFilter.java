@@ -1,11 +1,12 @@
 package edu.unicen.exa.tudai.prog3.gentilmendoza.main;
 
 import edu.unicen.exa.tudai.prog3.gentilmendoza.model.Book;
-import edu.unicen.exa.tudai.prog3.gentilmendoza.search.BookGenreHashMapIndex;
+import edu.unicen.exa.tudai.prog3.gentilmendoza.model.Dataset;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.BookGenreIndex;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.BookGenreIndexFactory;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.Index;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.util.CSVMapper;
+import edu.unicen.exa.tudai.prog3.gentilmendoza.util.Metrics;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.util.Timer;
 
 import java.io.IOException;
@@ -13,21 +14,34 @@ import java.util.List;
 
 public class CSVFilter {
 
+    private static final String INPUT_FOLDER = "src/main/resources/datasets/";
+    private static final String OUTPUT_FOLDER = "src/main/resources/results/";
+    private static final String SEPARATOR = "_";
+
     private BookGenreIndexFactory indexFactory = new BookGenreIndexFactory();
 
     private CSVMapper csvMapper = new CSVMapper();
 
-    public void filter(String filename, Index index, String genre) throws IOException {
-        System.out.print(index.getLabel() + " index over " + filename);
-        Timer timer = new Timer();
-        List<Book> books = csvMapper.readCSVFile(filename);
-        timer.mark(" read CSV ");
-        BookGenreIndex hashmapIndex = indexFactory.getBookGenreIndex(index, books);
-        timer.mark(" create index ");
-        List<Book> filtered = hashmapIndex.search(genre);
-        timer.mark(" search " + genre + " ");
-        csvMapper.writeCSVFile("src/main/resources/datasets/" + genre + index.getLabel().trim() + "SearchResults.csv", filtered);
-        timer.mark(" write CSV ");
-        System.out.println(".");
+    public void filter(Metrics metrics, Dataset dataset, Index index, Integer attempt, String genre) throws IOException {
+
+        List<Book> books = csvMapper.readCSVFile(INPUT_FOLDER + dataset.getFilename());
+        metrics.addMetric(dataset, index, "fileParsing");
+        if (books.isEmpty()) {
+            return;
+        }
+        BookGenreIndex indexObj = indexFactory.getBookGenreIndex(index, books);
+        metrics.addMetric(dataset, index," indexCreation");
+        List<Book> filtered = indexObj.search(genre);
+        metrics.addMetric(dataset, index," searchByGenre");
+        StringBuilder filenameBuilder = new StringBuilder(OUTPUT_FOLDER)
+                    .append(genre)
+                    .append(SEPARATOR)
+                    .append(index.getLabel().trim().toLowerCase())
+                    .append(SEPARATOR)
+                    .append(dataset.getFilename().split("\\.")[0])
+                    .append(SEPARATOR)
+                    .append("results.csv");
+        csvMapper.writeCSVFile(filenameBuilder.toString(), filtered);
+        metrics.addMetric(dataset, index," fileCreation");
     }
 }

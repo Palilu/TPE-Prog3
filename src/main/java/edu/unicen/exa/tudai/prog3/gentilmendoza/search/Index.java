@@ -1,9 +1,10 @@
 package edu.unicen.exa.tudai.prog3.gentilmendoza.search;
 
 public enum Index {
-    ARRAYLIST_NODE("ArraylistNode"),
     HASHMAP       ("Hashmap      "),
-    ARRAYLIST     ("Arraylist    ");
+    ARRAYLIST_NODE("ArraylistNode"),
+    ARRAYLIST     ("Arraylist    "),
+    TREE          ("Tree         ");
 
     private String label;
 

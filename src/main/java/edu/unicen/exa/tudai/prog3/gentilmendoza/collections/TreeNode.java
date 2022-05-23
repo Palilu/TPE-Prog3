@@ -8,13 +8,13 @@ import java.util.List;
 public class TreeNode {
 
 	private String key;
-	private List<Book> books;
+	private List<Book> books = new ArrayList<>();
 	private TreeNode left;
 	private TreeNode right;
 	
-	public TreeNode(String key) {
+	public TreeNode(String key, Book book) {
 		this.key = key;
-		this.books = new ArrayList<>();
+		this.books.add(book);
 		this.left = null;
 		this.right = null;
 	}
@@ -53,17 +53,5 @@ public class TreeNode {
 
 	public void setRight(TreeNode right) {
 		this.right = right;
-	}	
-	
-	public void printValue() {
-		// TODO: Hmmmm
-		System.out.print("(" + this.getKey() + ")");
-		if (this.getLeft() == null) {
-			System.out.print("-");
-		}
-		if (this.getRight() == null) {
-			System.out.print("-");
-		}
 	}
-	
 }

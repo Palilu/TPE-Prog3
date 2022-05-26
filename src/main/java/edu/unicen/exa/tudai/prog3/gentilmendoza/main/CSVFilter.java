@@ -7,7 +7,6 @@ import edu.unicen.exa.tudai.prog3.gentilmendoza.search.BookGenreIndexFactory;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.Index;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.util.CSVMapper;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.util.Metrics;
-import edu.unicen.exa.tudai.prog3.gentilmendoza.util.Timer;
 
 import java.io.IOException;
 import java.util.List;

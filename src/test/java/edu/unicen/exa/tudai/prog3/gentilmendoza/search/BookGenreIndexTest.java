@@ -14,14 +14,12 @@ public class BookGenreIndexTest {
         Metrics metrics = new Metrics();
         for (Dataset dataset : Dataset.values()) {
             for (Index index : Index.values()) {
-                for (int i = 0; i < 100; i++) {
-                    System.out.println(dataset.getFilename() + " " + index + " " + i);
-                    csvFilter.filter(metrics, dataset, index, i,"ciencia");
+                for (int i = 0; i < 1; i++) {
+                    System.out.println(dataset.getFilename() + " " + index);
+                    csvFilter.filter(metrics, dataset, index,"ciencia");
                 }
             }
         }
         metrics.analyze();
     }
-
-
 }

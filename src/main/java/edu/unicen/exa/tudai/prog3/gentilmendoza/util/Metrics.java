@@ -58,23 +58,31 @@ public class Metrics {
         Map<String, List<Metric>> metricsByMessage = metrics.stream().collect(Collectors.groupingBy(Metric::getMessage));
         System.out.println("Analizando métricas TPE programación 3.");
         System.out.println("Analizando parseo del archivo");
-        // Parsear el archivo no depende del índice, es O(l) donde l es la cantidad de líneas en un dataset.
-        metricsByMessage.get("fileParsing").stream()
+        printAverages(metricsByMessage, "fileParsing");
+        System.out.println("Analizando la creación del índice");
+        printAverages(metricsByMessage, "indexCreation");
+        System.out.println("Analizando la búsqueda");
+        printAverages(metricsByMessage, "searchByGenre");
+        System.out.println("Analizando la escritura del archivo");
+        printAverages(metricsByMessage, "fileCreation");
+    }
+
+    private void printAverages(Map<String, List<Metric>> metricsByMessage, String message) {
+        metricsByMessage.get(message).stream()
                 .collect(Collectors.groupingBy(Metric::getDataset))
                 .entrySet()
-                        .forEach(entry -> {
-                            System.out.print("Dataset: ");
-                            System.out.print(entry.getKey().getFilename());
-                            System.out.print(" AVG: ");
-                            Double average = entry.getValue().stream().mapToDouble(Metric::getTime).average().getAsDouble();
-                            System.out.print(average);
-                            System.out.println(".");
-                        });
-//        metricsByMessage.entrySet().forEach(entry -> {
-//            System.out.println("Analizando " + entry.getKey());
-//            Double average = entry.getValue().stream().mapToDouble(Metric::getTime).average().getAsDouble();
-//            System.out.println("Tiempo promedio: " + average);
-//        });
-
+                .forEach(entry -> entry.getValue().stream()
+                        .collect(Collectors.groupingBy(Metric::getIndex))
+                        .entrySet()
+                        .forEach(indexEntry -> {
+                                System.out.print("Dataset: ");
+                                System.out.print(entry.getKey().getFilename());
+                                System.out.print(" Index: ");
+                                System.out.print(indexEntry.getKey());
+                                System.out.print(" AVG: ");
+                                Double average = indexEntry.getValue().stream().mapToDouble(Metric::getTime).average().getAsDouble();
+                                System.out.print(average);
+                                System.out.println(".");
+                            }));
     }
 }

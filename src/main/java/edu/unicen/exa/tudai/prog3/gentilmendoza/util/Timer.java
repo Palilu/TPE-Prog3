@@ -1,8 +1,5 @@
 package edu.unicen.exa.tudai.prog3.gentilmendoza.util;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class Timer {
 
 	private double startTime;
@@ -18,9 +15,5 @@ public class Timer {
 	public double stop() {
 		double stopTime = System.nanoTime();
 		return (stopTime - startTime) / 1000000.0;
-	}
-
-	public void mark(String message) {
-
 	}
 }

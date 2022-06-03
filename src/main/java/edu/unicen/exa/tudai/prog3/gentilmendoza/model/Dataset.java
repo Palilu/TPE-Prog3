@@ -7,11 +7,11 @@ public enum Dataset {
     D3("dataset3.csv", 100000),
     D4("dataset4.csv", 1000000);
 
-    private static final String FOLDER = "";
+    private static final String FOLDER = "src/main/resources/datasets/";
 
-    private String filename;
+    private final String filename;
 
-    private Integer size;
+    private final Integer size;
 
     Dataset(String filename, Integer size) {
         this.filename = filename;

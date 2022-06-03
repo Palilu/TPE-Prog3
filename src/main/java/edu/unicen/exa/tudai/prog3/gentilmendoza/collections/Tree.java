@@ -54,9 +54,11 @@ public class Tree {
 		// Pará cada género del libro.
 		for (String genre : book.getGenres()) {
 			// Agrego el libro en el índice de géneros.
-			if (this.root == null) {
+			if (isEmpty()) {
+				// Si es el primer elemento en ser agregado. Agrego
 				this.root = new TreeNode(genre, book);
 			} else {
+				// Si no es el primer elemento recorro para agregarlo.
 				doInsert(this.root, genre, book);
 			}
 		}

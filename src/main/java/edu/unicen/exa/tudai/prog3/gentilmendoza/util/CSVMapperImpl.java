@@ -10,25 +10,43 @@ import java.util.List;
 
 public class CSVMapperImpl implements CSVMapper {
 
-    private static final String HEADERS = "Titulo,Autor,Paginas,Generos";
+    private static final String BOOK_FILE_HEADERS = "Titulo,Autor,Paginas,Generos";
+    private static final String SEARCH_FILE_HEADER = "Generos";
+
     private static final String COLUMN_SEPARATOR = ",";
     private static final String GENRE_SEPARATOR = " ";
 
-    public List<Book> readCSVFile(String filename) {
+    public List<Book> readBooksCSVFile(String filename) {
         try {
             String line;
             List<Book> result = new ArrayList<>();
             BufferedReader br = new BufferedReader(new FileReader(filename));
             while ((line = br.readLine()) != null) {
-                if (line.equalsIgnoreCase(HEADERS)) {
-                    continue;
-                }
                 try {
                     String[] columns = line.split(COLUMN_SEPARATOR);
                     Book book = new Book(columns[0], columns[1], Integer.valueOf(columns[2]), getGenres(columns[3]));
                     result.add(book);
                 } catch (NumberFormatException e) {
                     // Headers
+                }
+            }
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<List<String>> readSearchCSVFile(String filename) {
+        try {
+            String line;
+            List<List<String>> result = new ArrayList<>();
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            while ((line = br.readLine()) != null) {
+                var split = line.split(COLUMN_SEPARATOR);
+                if (split.length > 1) {
+                    result.add(new ArrayList<>(Arrays.asList(split)));
                 }
             }
             return result;
@@ -47,7 +65,7 @@ public class CSVMapperImpl implements CSVMapper {
             }
             FileWriter fw = new FileWriter(file);
             bw = new BufferedWriter(fw);
-            bw.write(HEADERS);
+            bw.write(BOOK_FILE_HEADERS);
             bw.newLine();
             for (Book book: books) {
                 bw.write(toCSV(book));

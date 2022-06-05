@@ -68,6 +68,7 @@ public class Metrics {
     }
 
     private void printAverages(Map<String, List<Metric>> metricsByMessage, String message) {
+        System.out.println("Dataset, Index, AVG");
         metricsByMessage.get(message).stream()
                 .collect(Collectors.groupingBy(Metric::getDataset))
                 .entrySet()
@@ -75,14 +76,13 @@ public class Metrics {
                         .collect(Collectors.groupingBy(Metric::getIndex))
                         .entrySet()
                         .forEach(indexEntry -> {
-                                System.out.print("Dataset: ");
                                 System.out.print(entry.getKey().getFilename());
-                                System.out.print(" Index: ");
+                                System.out.print(", ");
                                 System.out.print(indexEntry.getKey());
-                                System.out.print(" AVG: ");
+                                System.out.print(", ");
                                 Double average = indexEntry.getValue().stream().mapToDouble(Metric::getTime).average().getAsDouble();
                                 System.out.print(average);
-                                System.out.println(".");
+                                System.out.println("");
                             }));
     }
 }

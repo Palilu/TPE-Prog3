@@ -5,6 +5,7 @@ import edu.unicen.exa.tudai.prog3.gentilmendoza.model.Dataset;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.BookGenreIndex;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.BookGenreIndexFactory;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.search.Index;
+import edu.unicen.exa.tudai.prog3.gentilmendoza.util.CSVMapper;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.util.CSVMapperImpl;
 import edu.unicen.exa.tudai.prog3.gentilmendoza.util.Metrics;
 
@@ -17,14 +18,14 @@ public class CSVFilter {
 
     private BookGenreIndexFactory indexFactory = new BookGenreIndexFactory();
 
-    private CSVMapperImpl csvMapper = new CSVMapperImpl();
+    private CSVMapper csvMapper = new CSVMapperImpl();
 
     public void filter(Metrics metrics,
                        Dataset dataset,
                        Index index,
                        String genre) {
         // Leemos el CSV
-        List<Book> books = csvMapper.readCSVFile(dataset.getPath());
+        List<Book> books = csvMapper.readBooksCSVFile(dataset.getBookPath());
         metrics.addMetric(dataset, index, "fileParsing");
         if (books.isEmpty()) {
             return;

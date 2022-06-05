@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface CSVMapper {
 
-    List<Book> readCSVFile(String filename);
+    List<Book> readBooksCSVFile(String filename);
+
+    List<List<String>> readSearchCSVFile(String filename);
 
     void writeCSVFile(String filename, List<Book> books);
 }

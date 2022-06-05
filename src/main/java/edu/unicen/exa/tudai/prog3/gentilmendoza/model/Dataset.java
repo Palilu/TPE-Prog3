@@ -7,7 +7,8 @@ public enum Dataset {
     D3("dataset3.csv", 100000),
     D4("dataset4.csv", 1000000);
 
-    private static final String FOLDER = "src/main/resources/datasets/";
+    private static final String BOOKS_FOLDER = "src/main/resources/datasets/";
+    private static final String SEARCH_FOLDER = "src/main/resources/search/";
 
     private final String filename;
 
@@ -18,8 +19,12 @@ public enum Dataset {
         this.size = size;
     }
 
-    public String getPath() {
-        return FOLDER + filename;
+    public String getBookPath() {
+        return BOOKS_FOLDER + filename;
+    }
+
+    public String getSearchPath() {
+        return SEARCH_FOLDER + filename;
     }
 
     public String getFilename() {

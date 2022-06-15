@@ -28,4 +28,9 @@ public class Vertex<T> {
     public int hashCode() {
         return label != null ? label.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Vertex(" + label + ")";
+    }
 }

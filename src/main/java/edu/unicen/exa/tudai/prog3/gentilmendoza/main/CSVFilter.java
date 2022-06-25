@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CSVFilter {
 
-    private static final String OUTPUT_FOLDER = "src/main/resources/results/";
+    private static final String OUTPUT_FOLDER = "src/main/resources/results/part1/";
     private static final String SEPARATOR = "_";
 
     private BookGenreIndexFactory indexFactory = new BookGenreIndexFactory();

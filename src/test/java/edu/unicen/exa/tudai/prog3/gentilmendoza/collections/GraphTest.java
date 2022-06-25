@@ -3,23 +3,17 @@ package edu.unicen.exa.tudai.prog3.gentilmendoza.collections;
 public class GraphTest {
 
     public static void main(String[] args) {
-        Graph<String> pastaGraph = new Graph<>();
-        pastaGraph.addEdge("Cacio e pepe", "Alla Gricia");
-        pastaGraph.addEdge("Alla Gricia", "Carbonara");
-        pastaGraph.addEdge("Alla Gricia", "All\'amatriciana");
-        System.out.println(pastaGraph.exportForGraphvizOnline("G"));
-        System.out.println(pastaGraph.dijkstra("Cacio e pepe").exportForGraphvizOnline("D"));
+        Graph<String, String> pastaGraph = new Graph<>();
+        pastaGraph.setEdge("Cacio e pepe", "Alla Gricia", "Guanciale");
+        pastaGraph.setEdge("Alla Gricia", "Carbonara", "Uovo");
+        pastaGraph.setEdge("Alla Gricia", "All\'amatriciana", "Pomodoro");
+        System.out.println(pastaGraph.exportForGraphvizOnline("Pasta"));
 
-        Graph<String> shortcutGraph = new Graph<>();
-        shortcutGraph.addEdge("A", "D");
-        shortcutGraph.addEdge("A", "D");
-        shortcutGraph.addEdge("A", "D");
-        shortcutGraph.addEdge("A", "D");
-        shortcutGraph.addEdge("A", "D");
-        shortcutGraph.addEdge("A", "B");
-        shortcutGraph.addEdge("B", "C");
-        shortcutGraph.addEdge("C", "D");
+        Graph<String, Integer> shortcutGraph = new Graph();
+        shortcutGraph.setEdge("A", "D", 5);
+        shortcutGraph.setEdge("A", "B", 1);
+        shortcutGraph.setEdge("B", "C", 1);
+        shortcutGraph.setEdge("C", "D", 1);
         System.out.println(shortcutGraph.exportForGraphvizOnline("SC"));
-        System.out.println(shortcutGraph.dijkstra("A").exportForGraphvizOnline("SCR"));
     }
 }

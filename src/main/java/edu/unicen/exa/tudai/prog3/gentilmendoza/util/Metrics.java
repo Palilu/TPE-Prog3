@@ -43,7 +43,7 @@ public class Metrics {
 
     private Timer timer = new Timer();
 
-    List<Metric> metrics = new ArrayList<>();
+    private List<Metric> metrics = new ArrayList<>();
 
     public Metrics() {
         timer.start();

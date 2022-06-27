@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookIndexNode {
+
     private String key;
     private List<Book> values = new ArrayList<>();
 

@@ -10,6 +10,8 @@ import java.util.*;
 
 import java.util.stream.Collectors;
 
+import static java.util.function.Predicate.not;
+
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class GraphService {
 
@@ -37,13 +39,14 @@ public class GraphService {
             System.out.print(getPolinomialHighSearchValue(genreSearchGraph, genre));
             System.out.println(".");
         });
-        //System.out.println("Servicio #3 ");
+        System.out.println("Servicio #3 ");
         // Obtener el grafo únicamente con los géneros afines a un género A; es decir que,
         // partiendo del género A, se consiguió una vinculación cerrada entre uno o más
         // géneros que permitió volver al género de inicio.
-        //List.of("informática", "tecnología", "ciencia").forEach(genre -> genreSearchGraph.findRelatedGenres(genre));
-        //System.out.println(genreSearchGraph.exportForGraphvizOnline(dataset.name()));
-
+        Graph<String, Integer> alike = getAlikeGenres(genreSearchGraph, "informática");
+        System.out.println(alike.getVertices().size() + " Vertices.");
+        System.out.println(alike.getEdgeCount() + " Aristas.");
+        System.out.println(getEdgesWeight(alike) + " Ocurrencias.");
     }
 
     /**
@@ -67,6 +70,7 @@ public class GraphService {
                 genreSearchGraph.setEdge(v1, v2, genreSearchGraph.getLabel(v1, v2).orElse(0) + 1);
             }
         });
+        // Y lo retornamos
         return genreSearchGraph;
     }
 
@@ -108,13 +112,11 @@ public class GraphService {
      */
     public List<Pair<String, Integer>> getPolinomialHighSearchValue(Graph<String, Integer> graph,
                                                                     String genre) {
-
         List<String> visited = new ArrayList<>();
         visited.add(genre);
         List<Integer> searchValues = new ArrayList<>();
         searchValues.add(0);
         doGetPolinomialHighSearchValue(graph, genre, visited, searchValues);
-
         return visited.stream()
                 .map(g -> new Pair<>(g, searchValues.get(visited.indexOf(g))))
                 .collect(Collectors.toList());
@@ -141,5 +143,24 @@ public class GraphService {
                     searchValues.add(max.getRight()); // Agregamos el valor de búsqueda
                     doGetPolinomialHighSearchValue(graph, max.getLeft(), visited, searchValues); // Y llamamos recursivamente desde ahí.
                 });
+    }
+
+    /**
+     * 3. Obtener el grafo únicamente con los géneros afines a un género A; es decir que,
+     * partiendo del género A, se consiguió una vinculación cerrada entre uno o más
+     * géneros que permitió volver al género de inicio.
+     */
+    private Graph<String, Integer> getAlikeGenres(Graph<String, Integer> graph, String genre) {
+        Optional<List<String>> sscOpt = graph.getStronglyConnectedComponents(genre).stream()
+                .filter(scc -> scc.contains(genre) && scc.size() != 1)
+                .findFirst();
+        Graph<String, Integer> result = new Graph<>();
+        if (sscOpt.isPresent()) {
+            List<String> vertices = sscOpt.get();
+            vertices.forEach(vertex -> graph.getAdjacent(vertex).stream()
+                    .filter(vertices::contains)
+                    .forEach(sccAdj -> result.setEdge(vertex, sccAdj, graph.getLabel(vertex, sccAdj).get())));
+        }
+        return result;
     }
 }

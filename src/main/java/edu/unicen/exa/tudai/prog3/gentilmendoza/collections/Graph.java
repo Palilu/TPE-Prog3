@@ -129,18 +129,18 @@ public class Graph<V, E> {
      *  Los componentes fuertemente conectados son:
      *     [[0, 1, 2, 3], [4, 5, 6], [7] y [8]]
      */
-    public List<List<V>> getStronglyConnectedComponents(V genre) {
+    public List<List<V>> getStronglyConnectedComponents(V vertex) {
         // Para ello vamos a implementar el algoritmo de Kosaraju.
         List<List<V>> result = new ArrayList<>();
         // 1. Obtenemos una pila con los vértices ordenados por orden
         // de finalización de la recursión si comenzamos una búsqueda en
         // profundidad a partir del género de origen.
-        Stack<V> topologicalSearch = getTopologicalSearch(genre);
+        Stack<V> topologicalSearch = getTopologicalSearch(vertex);
         // 2. Transponemos el grafo original
         Graph<V, E> transposed = this.transpose();
         // 3. Y comenzando por el último vértice alcanzado desde el origen
         while (!topologicalSearch.isEmpty()) {
-            // Obtenemos los vértices alcanzables en profundidad desde ellos
+            // Obtenemos los vértices alcanzables en profundidad desde ellos en el grafo traspuesto.
             V current = topologicalSearch.pop();
             // Cada conjunto es un componente fuertemente conectado
             List<V> scc = transposed.deepFirstSearch(current, topologicalSearch);
@@ -170,9 +170,7 @@ public class Graph<V, E> {
         do {
             getTopologicalSearch(result, visited, current.get());
             current = vertices.stream().filter(not(visited::contains)).findFirst();
-
         } while(current.isPresent());
-
         return result;
     }
 
@@ -198,7 +196,8 @@ public class Graph<V, E> {
     private Graph<V, E> transpose() {
         Graph<V, E> transposed = new Graph<>();
         this.adjVertices.keySet().forEach(v1 ->
-                this.adjVertices.get(v1).entrySet().forEach(adj -> transposed.setEdge(adj.getKey(), v1, adj.getValue()))
+                this.adjVertices.get(v1).entrySet()
+                        .forEach(adj -> transposed.setEdge(adj.getKey(), v1, adj.getValue()))
         );
         return transposed;
     }
@@ -225,7 +224,7 @@ public class Graph<V, E> {
                                  Stack<V> stack) {
         visited.add(current);
         getAdjacent(current).stream()
-                .filter(genre -> stack.contains(genre) && !visited.contains(genre))
+                .filter(vertex -> stack.contains(vertex) && !visited.contains(vertex))
                 .forEach(adj -> deepFirstSearch(adj, visited, stack));
     }
 }

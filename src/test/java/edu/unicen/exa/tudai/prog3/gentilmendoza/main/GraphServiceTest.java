@@ -6,6 +6,6 @@ public class GraphServiceTest {
 
     public static void main(String[] args) {
         GraphService graphService = new GraphService();
-        graphService.generateGraphAndRunServices(Dataset.D2);
+        graphService.generateGraphAndRunServices(Dataset.D1);
     }
 }

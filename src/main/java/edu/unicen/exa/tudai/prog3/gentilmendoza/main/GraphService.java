@@ -10,9 +10,6 @@ import java.util.*;
 
 import java.util.stream.Collectors;
 
-import static java.util.function.Predicate.not;
-
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class GraphService {
 
     private final CSVMapper csvMapper = new CSVMapperImpl();
@@ -67,7 +64,8 @@ public class GraphService {
             for (int i = 1; i < search.size(); i++) {
                 String v1 = search.get(i-1);
                 String v2 = search.get(i);
-                genreSearchGraph.setEdge(v1, v2, genreSearchGraph.getLabel(v1, v2).orElse(0) + 1);
+                Integer count = genreSearchGraph.getLabel(v1, v2).orElse(0) + 1;
+                genreSearchGraph.setEdge(v1, v2, count);
             }
         });
         // Y lo retornamos
@@ -94,7 +92,9 @@ public class GraphService {
      * @param genre El género A.
      * @param n La cantidad de géneros más buscados
      */
-    public List<Pair<String, Integer>> getMostSearchAfter(Graph<String, Integer> graph, String genre, Integer n) {
+    public List<Pair<String, Integer>> getMostSearchAfter(Graph<String, Integer> graph,
+                                                          String genre,
+                                                          Integer n) {
         List<Pair<String, Integer>> sorted = graph.getAdjacent(genre).stream()
                         .map(adj -> new Pair<>(adj, graph.getLabel(genre, adj).get()))
                         .sorted(Collections.reverseOrder(Comparator.comparing(Pair::getRight)))
@@ -134,7 +134,7 @@ public class GraphService {
                                                 String current,
                                                 List<String> visited,
                                                 List<Integer> searchValues) {
-        graph.getAdjacent(current).stream()// Para cada adyacente
+        graph.getAdjacent(current).stream() // Para cada adyacente
                 .filter(adj -> !visited.contains(adj)) // Que no fué visitado
                 .map(adj -> new Pair<>(adj, graph.getLabel(current, adj).get())) // Hacemos un par vértice, valor de búsqueda
                 .max(Comparator.comparing(Pair::getRight)) // Nos quedamos con el mayor valor de búsqueda
@@ -151,16 +151,18 @@ public class GraphService {
      * géneros que permitió volver al género de inicio.
      */
     private Graph<String, Integer> getAlikeGenres(Graph<String, Integer> graph, String genre) {
-        Optional<List<String>> sscOpt = graph.getStronglyConnectedComponents(genre).stream()
-                .filter(scc -> scc.contains(genre) && scc.size() != 1)
-                .findFirst();
         Graph<String, Integer> result = new Graph<>();
-        if (sscOpt.isPresent()) {
-            List<String> vertices = sscOpt.get();
-            vertices.forEach(vertex -> graph.getAdjacent(vertex).stream()
-                    .filter(vertices::contains)
-                    .forEach(sccAdj -> result.setEdge(vertex, sccAdj, graph.getLabel(vertex, sccAdj).get())));
-        }
+        graph.getStronglyConnectedComponents(genre).stream()
+                .filter(scc -> scc.contains(genre) && scc.size() != 1)
+                .findFirst()
+                .ifPresent(scc -> scc
+                        .forEach(sccVertex -> graph.getAdjacent(sccVertex).stream()
+                                .filter(scc::contains)
+                                .forEach(adj -> result.setEdge(sccVertex, adj,
+                                        graph.getLabel(sccVertex, adj).get())
+                                )
+                        )
+                );
         return result;
     }
 }

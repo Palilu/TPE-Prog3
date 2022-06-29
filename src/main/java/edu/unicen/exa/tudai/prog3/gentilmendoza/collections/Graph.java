@@ -149,6 +149,7 @@ public class Graph<V, E> {
             // Y los sacamos de la búsqueda topológica y lista de nodos pendientes.
             topologicalSearch.removeAll(scc);
         }
+        System.out.println(result);
         return result;
     }
 

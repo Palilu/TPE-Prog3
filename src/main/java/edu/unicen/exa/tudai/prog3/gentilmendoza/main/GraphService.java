@@ -33,8 +33,12 @@ public class GraphService {
         System.out.println("Servicio #2 ");
         List.of("informática", "tecnología", "ciencia").forEach(genre -> {
             System.out.print("Más alto valor de búsqueda de " + genre);
-            System.out.print(getPolinomialHighSearchValue(genreSearchGraph, genre));
-            System.out.println(".");
+            List<Pair<String, Integer>> phsv = getPolinomialHighSearchValue(genreSearchGraph, genre);
+            System.out.print(" Total: ");
+            System.out.print(phsv.stream().map(Pair::getRight).mapToInt(Integer::valueOf).sum());
+            System.out.print(", Número de vértices: ");
+            System.out.print(phsv.size());
+            System.out.println(" " + phsv + ".");
         });
         System.out.println("Servicio #3 ");
         // Obtener el grafo únicamente con los géneros afines a un género A; es decir que,

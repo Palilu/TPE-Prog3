@@ -10,7 +10,7 @@ Las entradas de ambas entregas y generación de resultados se encuentra en:
 
     /src/resources
 
-Los casos de prueba de ambas entregas se encuentran en
+Los casos de prueba de ambas entregas se encuentran en:
 
     /test/main/java
 

@@ -99,11 +99,11 @@ public class GraphService {
     public List<Pair<String, Integer>> getMostSearchAfter(Graph<String, Integer> graph,
                                                           String genre,
                                                           Integer n) {
-        List<Pair<String, Integer>> sorted = graph.getAdjacent(genre).stream()
-                        .map(adj -> new Pair<>(adj, graph.getLabel(genre, adj).get()))
-                        .sorted(Collections.reverseOrder(Comparator.comparing(Pair::getRight)))
+        List<Pair<String, Integer>> sorted = graph.getAdjacent(genre).stream() // Para cada adyacente
+                        .map(adj -> new Pair<>(adj, graph.getLabel(genre, adj).get())) // Obtenemos un par hecho del vértice y la etiqueta
+                        .sorted(Collections.reverseOrder(Comparator.comparing(Pair::getRight))) // Los ordenamos descendentemente por la etiqueta
                         .collect(Collectors.toList());
-        return sorted.subList(0, Math.min(n, sorted.size()));
+        return sorted.subList(0, Math.min(n, sorted.size())); // Y retornamos los primeros N
     }
 
     /**
@@ -155,16 +155,17 @@ public class GraphService {
      * géneros que permitió volver al género de inicio.
      */
     private Graph<String, Integer> getAlikeGenres(Graph<String, Integer> graph, String genre) {
+        // Declaramos el grafo que vamos a retornar
         Graph<String, Integer> result = new Graph<>();
+        // Obtenemos los componentes fuertemente conectados del grafo
         graph.getStronglyConnectedComponents(genre).stream()
-                .filter(scc -> scc.contains(genre) && scc.size() != 1)
-                .findFirst()
+                .filter(scc -> scc.contains(genre) && scc.size() != 1) // Nos quedamos con el que contiene a nuestro género, si fuera más grande que 1
+                .findFirst()// Si existe
                 .ifPresent(scc -> scc
-                        .forEach(sccVertex -> graph.getAdjacent(sccVertex).stream()
-                                .filter(scc::contains)
-                                .forEach(adj -> result.setEdge(sccVertex, adj,
-                                        graph.getLabel(sccVertex, adj).get())
-                                )
+                        .forEach(sccVertex -> graph.getAdjacent(sccVertex).stream() // Para cada adyacente a cada vértice en el SCC
+                                .filter(scc::contains) // Que esté en el SCC
+                                .forEach(adj -> result.setEdge(sccVertex, // Agregamos el vértice al grafo resultado
+                                        adj, graph.getLabel(sccVertex, adj).get())) // Con la etiqueta del grafo original
                         )
                 );
         return result;

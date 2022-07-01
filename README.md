@@ -12,7 +12,7 @@ Las entradas de ambas entregas y generación de resultados se encuentra en:
 
 Los casos de prueba de ambas entregas se encuentran en:
 
-    /test/main/java
+    /src/test/java
 
 El informe del trabajo se encuentra en:
 
